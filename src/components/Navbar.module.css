@@ -1,0 +1,57 @@
+.navbar {
+  display: flex;
+  height: calc(60px - 1rem);
+  background-color: white;
+  align-items: center;
+  padding: 0 1.54rem; /* 20px / 13px = 1.538rem */
+  width: calc(100vw - 3.08rem); /* 40px / 13px = 3.077rem */
+}
+
+.navbar * {
+  color: #000;
+}
+
+.logo {
+  width: 100px;
+}
+
+.left {
+  display: flex;
+  width: 50%;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 1.38rem; /* 18px / 13px = 1.385rem */
+}
+
+/* .dropdown {
+} */
+
+.dropdownContent {
+  border-radius: 5px;
+}
+.dropdownContent option {
+  border-radius: none;
+}
+
+.right {
+  display: flex;
+  width: 50%;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.connectButton {
+  padding: 0.77rem 1.54rem; /* 10px / 13px = 0.769rem, 20px / 13px = 1.538rem */
+  background-color: blue;
+  color: white;
+  border-radius: 0.385rem; /* 5px / 13px = 0.385rem */
+  border: none;
+  font-weight: bold;
+  font-size: 1.08rem; /* 14px / 13px = 1.077rem */
+  cursor: pointer;
+}

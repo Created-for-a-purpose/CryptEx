@@ -43,7 +43,8 @@ const BalanceBox = () => {
      amount = ethers.parseEther(deposits[id])
      if(amount<=0) return
     }catch(err){
-      alert('Invalid amount')
+      // alert('Invalid amount')
+      dispatch({ type: 'INVALID_AMOUNT' })
       return
     }
     dispatch({ type: 'TRANSFER_REQUEST' })
@@ -58,7 +59,7 @@ const BalanceBox = () => {
           const tx = await trade.connect(signer).withdrawToken(tokens[id].target, amount)
           await tx.wait()
       }}catch(err){
-        alert('Transaction failed');
+        // alert('Transaction failed');
         dispatch({ type: 'TRANSFER_FAILED' })
       }
       setDeposit(['', '']);
@@ -116,7 +117,7 @@ const BalanceBox = () => {
                       className={styles.button}
                       id={index}
                       onClick={handleSubmit}
-                    >{choice}{transferProcessing && 'ing...'}</button>
+                    >{choice}</button>
                   </div>
                 </div>
               </>

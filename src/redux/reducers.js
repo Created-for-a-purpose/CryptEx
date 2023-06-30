@@ -143,6 +143,37 @@ export const trade = (state={contract: null, loaded:false, transferProcessing: f
                 ...state,
                 orders: action.allOrders,
             }
+        // Alerts
+        case 'INVALID_AMOUNT':
+            return {
+                ...state,
+                entryInvalid: true,
+            }
+        case 'ALERTED_INVALID_AMOUNT':
+            return {
+                ...state,
+                entryInvalid: false,
+            }
+        case 'BOOK_FAILED':
+            return {
+                ...state,
+                bookFailed: true,
+            }
+        case 'ALERTED_BOOK_FAILED':
+            return {
+                ...state,
+                bookFailed: false,
+            }
+        case 'FILL_FAILED':
+            return {
+                ...state,
+                fillFailed: true,
+            }
+        case 'ALERTED_FILL_FAILED':
+            return {
+                ...state,
+                fillFailed: false,
+            }
         default:
             return state;
     }

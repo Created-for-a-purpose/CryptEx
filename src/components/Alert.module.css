@@ -1,0 +1,28 @@
+.alert {
+    background: rgb(0, 0, 0);
+  
+    height: 100px;
+    width: 300px;
+    border-radius: 5%;
+    position: fixed;
+    bottom: 1.50em;
+    right: 1.50em;
+    z-index: 1;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+    text-align: center;
+  
+    cursor: pointer;
+  
+    transition: all 500ms ease;
+  }
+
+span{
+  font-family: cursive;
+  font-size: large;
+  color: lightskyblue;
+}

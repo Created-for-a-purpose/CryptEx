@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./BuySellBox.module.css";
 
 const BuySellBox = () => {
@@ -9,6 +9,7 @@ const BuySellBox = () => {
   const provider = useSelector(state => state.provider.connection);
   const tokens = useSelector(state => state.tokens.contracts);
   const trade = useSelector(state => state.trade.contract);
+  const dispatch = useDispatch();
 
   const handleChoice = (e) => {
     setChoice(e.target.innerText);
@@ -30,7 +31,8 @@ const BuySellBox = () => {
        try{
        amountToBuy = ethers.parseEther(order.Amount);
        amountToSell = ethers.parseEther((parseFloat(order.Amount)*parseFloat(order.Price)).toString());}
-       catch(err){alert('Invalid amount'); return}
+       catch(err){dispatch({type: 'INVALID_AMOUNT'});
+         return}
     }
 
     else{
@@ -39,14 +41,14 @@ const BuySellBox = () => {
        try{
        amountToSell = ethers.parseEther(order.Amount);
        amountToBuy = ethers.parseEther((parseFloat(order.Amount)*parseFloat(order.Price)).toString());}
-       catch(err){alert('Invalid amount'); return}
+       catch(err){dispatch({type: 'INVALID_AMOUNT'}); return}
     }
     if(amountToBuy<=0 || amountToSell<=0){return}
     
     try{
     const tx = await trade.connect(signer).makeOrder(tokenToSell, amountToSell, tokenToBuy, amountToBuy);
     await tx.wait();
-    }catch(err){alert('Failed to book order')}
+    }catch(err){dispatch({type: 'BOOK_FAILED'})}
     setorder({ Amount: "", Price: "", Expires: "" });
   };
 

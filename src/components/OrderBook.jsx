@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./OrderBook.module.css";
 import { orderBookSelector } from "../redux/selectors";
 
@@ -9,6 +9,7 @@ const OrderBook = () => {
   const symbols = useSelector(state => state.tokens.symbols);
   const provider = useSelector(state => state.provider.connection);
   const trade = useSelector(state => state.trade.contract);
+  const dispatch = useDispatch();
   //  console.log('orders are ', orders);
   const handleChoice = (e) => {
     setChoice(e.target.innerText);
@@ -22,7 +23,7 @@ const OrderBook = () => {
       await tx.wait(); 
     }
     catch(err){
-      alert('Failed to fill order') 
+      dispatch({ type: 'FILL_FAILED'})
     }
   }
 

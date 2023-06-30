@@ -10,6 +10,7 @@ import Trade from "./components/Trade";
 import Transactions from "./components/Transactions";
 import Navbar from "./components/Navbar";
 import PriceChart from './components/PriceChart';
+import Alert from './components/Alert';
 
 // redux interactions
 import { loadProvider, loadAccount, 
@@ -72,6 +73,7 @@ function App() {
             <Transactions />
           </div>
         </div>
+          <Alert /> 
       </div>
     </>
   );

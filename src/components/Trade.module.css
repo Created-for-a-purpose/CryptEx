@@ -1,5 +1,6 @@
 .container {
-    background-color: #2e3047;
+    /* background-color: #2e3047; */
+    background-color: #020d26;
     height: calc(100% - 2rem);
     width: calc(100% - 2rem);
     border-radius: 2%;

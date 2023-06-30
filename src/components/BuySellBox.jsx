@@ -1,9 +1,14 @@
 import React, { useState } from "react";
+import { ethers } from "ethers";
+import { useSelector } from "react-redux";
 import styles from "./BuySellBox.module.css";
 
-const BuySellBox = ({ tokens }) => {
+const BuySellBox = () => {
   const [choice, setChoice] = useState("Buy Order");
   const [order, setorder] = useState({});
+  const provider = useSelector(state => state.provider.connection);
+  const tokens = useSelector(state => state.tokens.contracts);
+  const trade = useSelector(state => state.trade.contract);
 
   const handleChoice = (e) => {
     setChoice(e.target.innerText);
@@ -12,22 +17,48 @@ const BuySellBox = ({ tokens }) => {
   const handleInput = (e) => {
     const { id, value } = e.target;
     setorder({ ...order, [id]: value });
+    // console.log(order);
   };
 
-  const handleSubmit = () => {
-    console.log(order);
+  const handleSubmit = async () => {
+    const signer = await provider.getSigner();
+    let tokenToSell, tokenToBuy, amountToBuy, amountToSell;
+
+    if(choice === 'Buy Order'){
+       tokenToSell = tokens[1].target;
+       tokenToBuy = tokens[0].target;
+       try{
+       amountToBuy = ethers.parseEther(order.Amount);
+       amountToSell = ethers.parseEther((parseFloat(order.Amount)*parseFloat(order.Price)).toString());}
+       catch(err){alert('Invalid amount'); return}
+    }
+
+    else{
+       tokenToBuy = tokens[1].target;
+       tokenToSell = tokens[0].target;
+       try{
+       amountToSell = ethers.parseEther(order.Amount);
+       amountToBuy = ethers.parseEther((parseFloat(order.Amount)*parseFloat(order.Price)).toString());}
+       catch(err){alert('Invalid amount'); return}
+    }
+    if(amountToBuy<=0 || amountToSell<=0){return}
+    
+    try{
+    const tx = await trade.connect(signer).makeOrder(tokenToSell, amountToSell, tokenToBuy, amountToBuy);
+    await tx.wait();
+    }catch(err){alert('Failed to book order')}
+    setorder({ Amount: "", Price: "", Expires: "" });
   };
 
   const fields = [
     { label: `Amount to ${choice === 'Buy Order'? 'Buy' : 'Sell'}`, id: "Amount" },
     { label: "Price", id: "Price" },
-    { label: "Total", id: "Total" },
     { label: "Expires", id: "Expires" },
   ];
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>Buy/Sell</div>
+      <div className={styles.header}>Buy / Sell</div>
       <div className={styles.choices}>
         <div
           onClick={handleChoice}
@@ -47,9 +78,9 @@ const BuySellBox = ({ tokens }) => {
         </div>
       </div>
       <div className={styles.form}>
-        {fields.map((field) => {
+        {fields.map((field, index) => {
           return (
-            <div className={styles.inputBox}>
+            <div className={styles.inputBox} key={index}>
               <label htmlFor={field.id} className={styles.label}>
                 {field.label}
               </label>
@@ -61,12 +92,13 @@ const BuySellBox = ({ tokens }) => {
                 className={styles.input}
               />
             </div>
-          );
+          ); 
         })}
         <div className={styles.buttonBox}>
           <button onClick={handleSubmit} className={styles.button}>
             {choice}
           </button>
+          {/* <hr/> */}
         </div>
       </div>
     </div>

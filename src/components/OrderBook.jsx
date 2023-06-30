@@ -1,12 +1,30 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styles from "./OrderBook.module.css";
+import { orderBookSelector } from "../redux/selectors";
 
-const OrderBook = ({ orders }) => {
+const OrderBook = () => {
   const [choice, setChoice] = useState("Buy Orders");
-
+  const orders = useSelector(orderBookSelector);
+  const symbols = useSelector(state => state.tokens.symbols);
+  const provider = useSelector(state => state.provider.connection);
+  const trade = useSelector(state => state.trade.contract);
+  //  console.log('orders are ', orders);
   const handleChoice = (e) => {
     setChoice(e.target.innerText);
   };
+
+  const fillOrder = async (order) => {
+    try{
+      const signer = await provider.getSigner();
+      const id = order[0];
+      const tx = await trade.connect(signer).confirmOrder(id);
+      await tx.wait(); 
+    }
+    catch(err){
+      alert('Failed to fill order') 
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -31,17 +49,35 @@ const OrderBook = ({ orders }) => {
       </div>
       <div className={styles.table}>
         <div className={styles.tableHeader}>
-          <div className={styles.tableHeaderHeading}>PPT</div>
-          <div className={styles.tableHeaderHeading}>PPT/ETH</div>
-          <div className={styles.tableHeaderHeading}>ETH</div>
+          { symbols && symbols[0] && symbols[1] && 
+          <div className={styles.tableHeaderHeading}>{symbols[0]}</div>}
+          <div className={styles.tableHeaderHeading}>{symbols[0]}/{symbols[1]}</div> 
+          <div className={styles.tableHeaderHeading}>{symbols[1]}</div>
+          {/* <div className={styles.tableHeaderHeading}>Expires</div> */}
+           
         </div>
         <div className={styles.tableData}>
-          {orders.map((token) => {
+          { orders && choice==='Buy Orders' &&
+          orders.buyOrders.map((order, index) => {
+            // console.log('order is ', typeof order.price)
             return (
-              <div className={styles.tableEntry} key={token.ppt}>
-                <div className={styles.tableEntryValue}>{token.ppt}</div>
-                <div className={styles.tableEntryValue}>{token.ratio}</div>
-                <div className={styles.tableEntryValue}>{token.eth}</div>
+              <div className={styles.tableEntry} key={index} onClick={()=>fillOrder(order)}>
+                <div className={styles.tableEntryValue}>{order.token0Amount}</div>
+                <div className={styles.tableEntryValue} style={{ color: `${order.orderTypeClass}` }}>{order.price}</div>
+                <div className={styles.tableEntryValue}>{order.token1Amount}</div>
+                {/* <div className={styles.tableEntryValue}>{order.expire.toString()}</div> */}
+              </div>
+            );
+          })}
+          { orders && choice==='Sell Orders' &&
+          orders.sellOrders.map((order, index) => {
+            // console.log('order is ', orders.sellOrders)
+            return (
+              <div className={styles.tableEntry} key={index} onClick={()=>fillOrder(order)}>
+                <div className={styles.tableEntryValue}>{order.token0Amount}</div>
+                <div className={styles.tableEntryValue} style={{ color: `${order.orderTypeClass}` }}>{order.price}</div>
+                <div className={styles.tableEntryValue}>{order.token1Amount}</div>
+                {/* <div className={styles.tableEntryValue}>{order.expire.toString()}</div> */}
               </div>
             );
           })}

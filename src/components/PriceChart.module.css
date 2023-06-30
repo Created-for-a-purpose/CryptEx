@@ -1,0 +1,25 @@
+.container {
+    /* background-color: #2e3047; */
+    background-color: #020d26;
+    height: calc(100% - 2rem);
+    width: calc(100% - 2rem);
+    border-radius: 2%;
+  }
+  
+  .header {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-start;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    padding-bottom: 0;
+  }
+
+.placeholder{
+ position: absolute;
+  top: 30%;
+  left: 71%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  font-size: 2rem;
+}

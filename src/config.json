@@ -1,0 +1,37 @@
+{
+    "31337": {
+        "Martian": {
+            "address": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
+        },
+        "EthCoins": {
+            "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+        },
+        "StellarCoins": {
+            "address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788"
+        },
+        "trade": {
+            "address": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e"
+        },
+        "blockExplorer": "#"
+    },
+    
+    "11155111": {
+        "Martian": {
+            "address": "0xbED1095F1D02FCA01143eAE2699411DFfF98e232"
+        },
+        "EthCoins": {
+            "address": "0xbeC2D90f4cB478093728294739a69A3B5EBAD2db"
+        },
+        "StellarCoins": {
+            "address": "0xF213a6Ca0CFb7758A875106E4f338ed52E4de092"
+        },
+        "trade": {
+            "address": "0xBf59E8D7E5F8a67786c8dC28B1e677E127bFdf58"
+        },
+        "blockExplorer": "https://sepolia.etherscan.io/"
+    },
+
+    "1442":{
+        "blockExplorer": "https://testnet-zkevm.polygonscan.com/"
+    }
+}

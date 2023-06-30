@@ -1,13 +1,20 @@
-const hre = require("hardhat");
-
 async function main() {
-  const [deployer] = await hre.ethers.getSigners();
-  const token = await hre.ethers.deployContract("Token");
+  const [deployer, feeAccount] = await hre.ethers.getSigners();
+  console.log("Deployer account:", deployer.address);
+  console.log("Fee account:", feeAccount.address);
 
-  await token.waitForDeployment();
+  const Token = await ethers.getContractFactory("Token");
+  const Trade = await ethers.getContractFactory("Trade");
 
-  console.log("Contract address:", token.target);
-  console.log("Token deployed by:", deployer.address);
+  const rolls = await Token.deploy('Martian', 'MTI', '100000');
+  console.log("\nMartian deployed to:", rolls.target);
+  const lambo = await Token.deploy('EthCoins', 'ETC', '100000');
+  console.log("EthCoins deployed to:", lambo.target);
+  const bugatti = await Token.deploy('StellarCoins', 'STC', '100000');
+  console.log("StellarCoins deployed to:", bugatti.target);
+
+  const trade = await Trade.deploy(feeAccount.address, 10);
+  console.log("Trade deployed to:", trade.target);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

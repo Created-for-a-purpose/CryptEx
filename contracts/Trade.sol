@@ -125,13 +125,13 @@ contract Trade{
 
         uint256 _commissionAmount=(_amountToBuy*percentCommission)/100;
 
-        require(tokens[_tokenToBuy][_maker]>=(_amountToBuy+_commissionAmount),"Insufficient deposit amount");
+        require(tokens[_tokenToBuy][msg.sender]>=(_amountToBuy+_commissionAmount),"Insufficient deposit amount");
+        require(tokens[_tokenToSell][_maker]>=_amountToSell,"Insufficient deposit amount");
         unchecked{
         tokens[_tokenToBuy][_maker]+=_amountToBuy;
         tokens[_tokenToBuy][msg.sender]-=(_amountToBuy+_commissionAmount);
         }
 
-        require(tokens[_tokenToSell][msg.sender]>=_amountToSell,"Insufficient deposit amount");
         unchecked{
         tokens[_tokenToSell][msg.sender]+=_amountToSell;
         tokens[_tokenToSell][_maker]-=_amountToSell;

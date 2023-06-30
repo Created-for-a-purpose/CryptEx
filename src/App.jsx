@@ -1,82 +1,48 @@
-import React from "react";
-import "./App.css";
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import config from './config.json';
+
+//Components
 import BalanceBox from "./components/BalanceBox";
 import BuySellBox from "./components/BuySellBox";
 import OrderBook from "./components/OrderBook";
 import Trade from "./components/Trade";
 import Transactions from "./components/Transactions";
 import Navbar from "./components/Navbar";
+import PriceChart from './components/PriceChart';
+
+// redux interactions
+import { loadProvider, loadAccount, 
+         loadNetwork, loadTrade, subscribeToEvents,
+         loadOrders
+        } from "./redux/interactions";
 
 function App() {
-  const tokens = [
-    { token: "PPT", wallet: 100, DeTEx: 53.29 },
-    { token: "PPT", wallet: 100, DeTEx: 53.29 },
-  ];
+  const dispatch = useDispatch();
 
-  const orders = [
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-    { ppt: 100, ratio: 0.0001, eth: 0.01 },
-  ];
+  const loadContracts = async () => {
+    const provider = loadProvider(dispatch);
+    const chainId  = await loadNetwork(dispatch, provider);
+    
+    window.ethereum.on('chainChanged', () => {
+    window.location.reload();
+    });
+    
+    window.ethereum.on('accountsChanged', () => {
+    loadAccount(dispatch, provider);
+    });
 
-  const trades = [
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-    { time: "12:00", ppt: 100, ratio: 0.0001 },
-  ];
+    // const addresses = [config[chainId].Martian.address, config[chainId].EthCoins.address]
+    // await loadTokens(dispatch, provider, addresses);
+    const trade = await loadTrade(dispatch, provider, config[chainId].trade.address);
+    loadOrders(dispatch, trade, provider);  
+    subscribeToEvents(dispatch, trade);
+    console.log('subscribed')
+  }
 
-  const transactions = [
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-    {transaction : "0x1234567890", type: "Buy Order",ppt: 100, ratio: 0.0001, eth: 0.01},
-  ]
+  useEffect(() => {
+    loadContracts();
+  })
 
   return (
     <>
@@ -84,24 +50,26 @@ function App() {
       <div className="container">
         <div className="left">
           <div className="balanceBox">
-            <BalanceBox tokens={tokens} />
+            <BalanceBox />
           </div>
           <div className="buySellBox">
-            <BuySellBox tokens={tokens} />
+            <BuySellBox />
           </div>
         </div>
         <div className="middle">
           <div className="orderBook">
-            <OrderBook orders = {orders} />
+            <OrderBook />
           </div>
           <div className="trades">
-            <Trade transactions = {trades} />
+            <Trade />
           </div>
         </div>
         <div className="right">
-          <div className="priceChart"></div>
+          <div className="priceChart">
+            <PriceChart />
+          </div>
           <div className="transactions">
-            <Transactions transactions={transactions}></Transactions>
+            <Transactions />
           </div>
         </div>
       </div>

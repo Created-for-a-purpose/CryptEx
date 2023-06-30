@@ -1,18 +1,27 @@
 .navbar {
   display: flex;
   height: calc(60px - 1rem);
-  background-color: white;
+  background-color: #020d26;
+  /* background-color: rgb(6, 3, 22); */
   align-items: center;
   padding: 0 1.54rem; /* 20px / 13px = 1.538rem */
   width: calc(100vw - 3.08rem); /* 40px / 13px = 3.077rem */
+  margin-bottom: 2.1px;
 }
 
 .navbar * {
-  color: #000;
+  /* color: #000; */
+  color: lightskyblue;
+  /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .logo {
-  width: 100px;
+  width: 90px;
+  height: 40px
 }
 
 .left {
@@ -33,9 +42,15 @@
 
 .dropdownContent {
   border-radius: 5px;
+  background-color: black;
 }
 .dropdownContent option {
   border-radius: none;
+}
+.dropdownContent:hover{
+  cursor: pointer;
+  /* background-color: lavender; */
+  background-color: #041847;
 }
 
 .right {
@@ -45,13 +60,20 @@
   justify-content: flex-end;
 }
 
+.balance{
+  color: rgb(224, 210, 3)
+}
 .connectButton {
   padding: 0.77rem 1.54rem; /* 10px / 13px = 0.769rem, 20px / 13px = 1.538rem */
-  background-color: blue;
-  color: white;
+  background-color: black;
+  color: lightskyblue;
   border-radius: 0.385rem; /* 5px / 13px = 0.385rem */
   border: none;
   font-weight: bold;
   font-size: 1.08rem; /* 14px / 13px = 1.077rem */
   cursor: pointer;
+}
+.connectButton:hover {
+  background-color: lightskyblue;
+  color: black;
 }
